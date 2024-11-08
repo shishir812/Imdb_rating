@@ -12,7 +12,9 @@ from .pagination import WatchListPagination
 # Create your views here.
 
 class StreamPlatformAV(APIView):
-    permission_classes = [IsAuthenticated]
+    #permission_classes = [IsAuthenticated]
+    permission_classes = [AdminOrReadOnly]
+
     def get(self, request):
         platform = StreamPlatform.objects.all()
         serializer = StreamPlatformSerializer(platform, many=True)
@@ -22,12 +24,14 @@ class StreamPlatformAV(APIView):
         serializer = StreamPlatformSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors)
 
 
 class StreamPlatformDetailAV(APIView):
+    #permission_classes = [IsAuthenticated]
+    permission_classes = [AdminOrReadOnly]
     def get(self, request, pk):
         try:
             platform = StreamPlatform.objects.get(pk=pk)
@@ -58,9 +62,9 @@ class WatchListGV(generics.ListAPIView):
     serializer_class = WatchListSerializer
     pagination_class = WatchListPagination
 
-
 class WatchListAV(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AdminOrReadOnly]
     def get(self, request):
         movies = WatchList.objects.all()
         serializer = WatchListSerializer(movies, many=True)
@@ -70,13 +74,14 @@ class WatchListAV(APIView):
         serializer = WatchListSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         else:
             return Response(serializer.errors)
 
 
 class WatchListDetailAV(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, pk):
         try:
             movie = WatchList.objects.get(pk=pk)

@@ -31,10 +31,10 @@ def registration_view(request):
 
         token = Token.objects.get(user=account).key
         data['token'] = token
-        #refresh = RefreshToken.for_user(account)
-        #data['token'] = {
-         #                     'refresh': str(refresh),
-         #                    'access': str(refresh.access_token),
+        # refresh = RefreshToken.for_user(account)
+        # data['token'] = {
+        #                     'refresh': str(refresh),
+        #                     'access': str(refresh.access_token),
         #              }
 
 
@@ -42,4 +42,4 @@ def registration_view(request):
         data = serializer.errors
 
 
-    return Response(data)
+    return Response(data, status=status.HTTP_201_CREATED)
